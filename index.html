@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <!-- Nur eigene Dateien, Supabase und das Wetter dürfen geladen werden; keine Inline-Skripte -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://kfjbbsmyfmbidvwjhlfa.supabase.co https://api.open-meteo.com; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>CAPO Dashboard</title>
+  <meta name="description" content="Persönliches Dashboard von Samuel: Heute, Studium, CAPO, Kalender und wichtige Mails.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f3f3f3">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0a0a0a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Dashboard">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" href="icons/favicon.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="preload" href="assets/fonts/Switzer-Light.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/Switzer-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/app.css">
+  <script src="js/theme-init.js"></script>
+</head>
+<body>
+  <div class="banner" aria-hidden="true"><div class="banner-logo"></div></div>
+  <header class="masthead" id="top">
+    <div class="masthead-inner">
+      <div class="greeting">
+        <p class="kicker" id="h-kicker"></p>
+        <h1 id="h-greeting">Guten Tag, Samuel</h1>
+        <p class="dateline" id="h-date"></p>
+      </div>
+      <div class="status">
+        <div class="weather" id="h-weather" aria-live="polite"></div>
+        <div class="status-row">
+          <span class="sync" id="h-sync"></span>
+        </div>
+        <div class="status-row">
+          <span class="updated" id="h-updated">Wird geladen …</span>
+          <button type="button" class="icon-btn" id="btn-refresh" aria-label="Jetzt aktualisieren" title="Aktualisieren"></button>
+          <button type="button" class="icon-btn" id="btn-theme" aria-label="Hell- oder Dunkelmodus wählen" title="Darstellung"></button>
+          <button type="button" class="icon-btn" id="btn-account" aria-label="Konto" title="Konto"></button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Module">
+    <div class="tabs-inner" role="tablist" id="tabs"></div>
+  </nav>
+
+  <main id="view" class="view" tabindex="-1"></main>
+
+  <div class="sheet-backdrop" id="sheet-backdrop" hidden></div>
+  <section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" hidden>
+    <div class="sheet-head">
+      <h2 id="sheet-title"></h2>
+      <button type="button" class="icon-btn" data-close aria-label="Schliessen"></button>
+    </div>
+    <div class="sheet-body" id="sheet-body"></div>
+  </section>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
