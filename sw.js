@@ -1,5 +1,5 @@
 // Service Worker: App-Gerüst und Logo offline (Cache zuerst), Daten frisch (Netz zuerst, Cache als Rückfall)
-const VERSION = "dash-33f30fb22e";
+const VERSION = "dash-1f0349f8b6";
 const SHELL = [
   "./", "index.html", "manifest.webmanifest", "css/app.css",
   "js/theme-init.js", "js/main.js", "js/config.js", "js/supa.js", "js/cal.js", "js/util.js", "js/store.js", "js/data.js", "js/bwl.js", "js/todos.js", "js/ui.js", "js/charts.js",

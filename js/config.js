@@ -1,7 +1,8 @@
 // Öffentliche Projektdaten von Supabase (der publishable Key ist für den Browser gedacht; Zugriff schützen Login und RLS).
 // Geheimnisse (Wix-Key, iCloud, GMX) liegen nur in den Supabase-Secrets, nie hier.
-// Module ein- und ausschalten. Mails sind vorerst ausgelassen (Entscheid vom 29.10.2026); true schaltet Tab und Karte wieder ein.
-export const MODULES = { mails: false };
+// Module ein- und ausschalten; true schaltet Tab und Karte wieder ein.
+// Mails vorerst ausgelassen (29.10.2026). CAPO/Wix ausgeblendet, solange es noch keine Verkäufe gibt (30.10.2026).
+export const MODULES = { mails: false, capo: false };
 
 export const SUPABASE = {
   url: "https://kfjbbsmyfmbidvwjhlfa.supabase.co",

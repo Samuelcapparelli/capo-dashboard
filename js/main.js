@@ -21,8 +21,8 @@ const HOSTED = (location.protocol === "https:" && !/^(localhost|127\.0\.0\.1)$/.
 const gated = () => HOSTED && !supa.signedIn();
 const SYNC_WARN_H = 24;
 const VIEWS = { heute, studium, capo, kalender, mails };
-const TABS = [["heute", "Heute"], ["studium", "Studium"], ["capo", "CAPO"], ["kalender", "Kalender"], ["mails", "Mails"]].filter(([k]) => k !== "mails" || MODULES.mails);
-if (!MODULES.mails) delete VIEWS.mails;
+const TABS = [["heute", "Heute"], ["studium", "Studium"], ["capo", "CAPO"], ["kalender", "Kalender"], ["mails", "Mails"]].filter(([k]) => MODULES[k] !== false);
+for (const k of Object.keys(VIEWS)) if (MODULES[k] === false) delete VIEWS[k];
 const $ = id => document.getElementById(id);
 
 const ctx = {
@@ -48,7 +48,8 @@ async function loadAll() {
   // Wetter blockiert nichts: kommt es später, wird nur der Kopf neu gezeichnet
   loadWeather().then(w => { ctx.weather = w; }, () => { ctx.weather = null; }).finally(renderHeader);
   if (gated()) { ctx.updatedAt = Date.now(); renderHeader(); renderTabs(); renderView(false); return; }
-  const [b, c] = await Promise.allSettled([loadBwl(), loadCapo(), loadKal()]);
+  // Ausgeblendete Module laden nichts (CAPO: keine Wix-Abfrage)
+  const [b, c] = await Promise.allSettled([loadBwl(), MODULES.capo ? loadCapo() : Promise.resolve(null), loadKal()]);
   if (b.status === "fulfilled") { bwl.init(b.value); ctx.bwl = { ok: true, data: b.value }; }
   else ctx.bwl = bwl.data() ? { ok: true, data: bwl.data(), stale: true } : { ok: false, error: b.reason?.message || "Daten fehlen" };
   ctx.capo = c.status === "fulfilled" ? { ok: true, data: c.value } : { ok: false, error: c.reason?.message || "Shop-Daten fehlen" };
@@ -91,7 +92,7 @@ function renderView(animate) {
     root.innerHTML = `<section class="card" style="max-width:520px;margin:48px auto 0">
       <p class="kicker">Privat</p>
       <h2 style="font-size:32px;font-weight:300;letter-spacing:-.02em;margin:10px 0 10px">Anmelden</h2>
-      <p class="muted">Dieses Dashboard ist privat. Nach der Anmeldung erscheinen Studium, CAPO und Kalender.</p>
+      <p class="muted">Dieses Dashboard ist privat. Nach der Anmeldung erscheinen ${MODULES.capo ? "Studium, CAPO und Kalender" : "Studium und Kalender"}.</p>
       <button type="button" class="btn primary" data-act="login" style="margin-top:22px">${I.user}Anmelden</button>
     </section>`;
     return;
@@ -166,7 +167,7 @@ function sheetManual() {
 function sheetAccount() {
   if (supa.signedIn()) {
     openSheet("Konto", `<p class="small muted">Angemeldet als</p><p style="font-size:18px;margin:4px 0 18px">${esc(supa.email())}</p>
-      <p class="small muted" style="margin-bottom:18px">Live-Daten: CAPO (Wix). Kalender, Mails und Push folgen.</p>
+      <p class="small muted" style="margin-bottom:18px">Live-Daten: Studium (BWL-Sync) und iCloud-Kalender${MODULES.capo ? ", CAPO (Wix)" : ""}.</p>
       <div class="form-actions"><button type="button" class="btn" data-act="logout">Abmelden</button></div>`);
     return;
   }

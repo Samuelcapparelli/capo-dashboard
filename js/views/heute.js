@@ -17,7 +17,7 @@ export function render(ctx) {
     ${timelineCard(ctx, today)}
     ${todoCard(ctx, today)}
     ${MODULES.mails ? mailCard() : ""}
-    ${capoCard(ctx)}
+    ${MODULES.capo ? capoCard(ctx) : ""}
     ${fokusCard(ctx, today)}
     ${lernCard(ctx, today)}
   </div>`;
@@ -133,7 +133,7 @@ function fokusCard(ctx, today) {
   if (!ctx.bwl.ok) return card({ cls: "s4 p6 stretch", title: "Fokus", body: errorBox("Studiumsdaten", ctx.bwl.error) });
   const pr = bwl.priorities(today), top = pr[0];
   return card({
-    cls: "s4 p6 stretch", title: "Fokus als Nächstes", link: "studium",
+    cls: MODULES.capo ? "s4 p6 stretch" : "s6 p6 stretch", title: "Fokus als Nächstes", link: "studium",
     body: `<p style="font-size:26px;font-weight:300;letter-spacing:-.02em;line-height:1.15">${esc(top.f.name)}</p>
       <p class="small muted" style="margin-top:6px">${esc(bwl.fokusText(top))}</p>
       <ul class="list" style="margin-top:14px">${pr.map(s => `<li class="row" style="min-height:44px;padding:6px 0"><span class="grow">${esc(s.f.kurz)}</span>${ampel(s.ampel)}</li>`).join("")}</ul>`,
@@ -145,7 +145,7 @@ function lernCard(ctx, today) {
   const mon = mondayISO(today), ziel = bwl.budgetFor(mon);
   const ist = Object.values(bwl.weekLernzeit(mon)).reduce((a, b) => a + b, 0);
   return card({
-    cls: "s3 stretch", title: "Lernzeit Woche", link: "studium",
+    cls: MODULES.capo ? "s3 stretch" : "s6 stretch", title: "Lernzeit Woche", link: "studium",
     body: `<p class="big m">${ist < 60 ? `${ist}<span class="unit">min</span>` : `${esc(hours(ist))}<span class="unit">h</span>`}</p>
       <p class="stat-label">von ${esc(hours(ziel))} h Wochenziel</p>
       <div style="margin:14px 0 16px">${bar(ziel ? ist / ziel : 0)}</div>
